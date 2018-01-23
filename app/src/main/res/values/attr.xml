@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="CircleRippleView">
+    <attr format="color" name="circle_color"/>
+  </declare-styleable>
+</resources>

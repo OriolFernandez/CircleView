@@ -8,15 +8,11 @@ import android.util.AttributeSet
 import android.view.View
 
 
-class CircleRippleView : View {
-  constructor(context: Context) : super(context)
+class CircleRippleView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
-  constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
-  constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs,
-      defStyleAttr)
-
-  private var paint: Paint
+  private var paint: Paint = Paint()
   private var canvasSize: Int = 0
   private var radius = 0f
   private val minRadius = 30f
@@ -24,12 +20,21 @@ class CircleRippleView : View {
   private var maxLevel = 1f;
 
   init {
-    paint = Paint()
     paint.isAntiAlias = true
     paint.style = Paint.Style.FILL
 
     //Circle color
-    paint.color = Color.RED
+
+    attrs?.let {
+      val typedArray = context.obtainStyledAttributes(it,
+          R.styleable.CircleRippleView, 0, 0)
+      val color = typedArray.getColor(R.styleable.CircleRippleView_circle_color,
+          Color.RED)
+
+      paint.color = color
+
+      typedArray.recycle()
+    }
   }
 
   fun changeLevel(inputLevel: Float) {
@@ -43,12 +48,12 @@ class CircleRippleView : View {
 
   public override fun onDraw(canvas: Canvas) {
     canvasSize = canvas.width;
-    radius = minRadius + (((canvasSize - minRadius*2 ) / 2 ) * level)
+    radius = minRadius + (((canvasSize - minRadius * 2) / 2) * level)
     // circleCenter is the x or y of the view's center
     // radius is the radius in pixels of the cirle to be drawn
     // paint contains the shader that will texture the shape
-    val circleCenter = (canvasSize ) / 2f
-    canvas.drawCircle(circleCenter , circleCenter ,
+    val circleCenter = (canvasSize) / 2f
+    canvas.drawCircle(circleCenter, circleCenter,
         radius, paint)
 
   }
