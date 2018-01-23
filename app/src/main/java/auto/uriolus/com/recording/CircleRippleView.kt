@@ -18,35 +18,37 @@ class CircleRippleView : View {
 
   private var paint: Paint
   private var canvasSize: Int = 0
-  private var borderWidth = 5F
   private var radius = 0f
-  private val minRadius=40f
-  private var level=1f
+  private val minRadius = 30f
+  private var level = 1f
+  private var maxLevel = 1f;
+
   init {
-    val strokeWidth = 40f
     paint = Paint()
-    paint.setAntiAlias(true)
-    paint.setStyle(Paint.Style.FILL)
+    paint.isAntiAlias = true
+    paint.style = Paint.Style.FILL
 
     //Circle color
-    paint.setColor(Color.RED)
-
+    paint.color = Color.RED
   }
 
-  fun changeLevel(level: Float) {
-    this.level=level
+  fun changeLevel(inputLevel: Float) {
+    if ((inputLevel / maxLevel) > 1) {
+      //Adapt to max value
+      maxLevel = inputLevel
+    }
+    this.level = inputLevel / maxLevel
     invalidate()
   }
 
   public override fun onDraw(canvas: Canvas) {
-    canvasSize = canvas.getWidth();
-    radius = minRadius+(((canvasSize - borderWidth * 2) / 2 - 4.0f)*level)
+    canvasSize = canvas.width;
+    radius = minRadius + (((canvasSize - minRadius*2 ) / 2 ) * level)
     // circleCenter is the x or y of the view's center
     // radius is the radius in pixels of the cirle to be drawn
     // paint contains the shader that will texture the shape
-    val circleCenter = (canvasSize - borderWidth * 2) / 2
-
-    canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth,
+    val circleCenter = (canvasSize ) / 2f
+    canvas.drawCircle(circleCenter , circleCenter ,
         radius, paint)
 
   }
